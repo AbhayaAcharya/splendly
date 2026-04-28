@@ -96,6 +96,16 @@ def get_user_by_email(email):
     ).fetchone()
 
 
+def create_user(name, email, password):
+    db = get_db()
+    db.execute(
+        "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
+        (name, email, generate_password_hash(password))
+    )
+    db.commit()
+    return db.execute("SELECT last_insert_rowid()").fetchone()[0]
+
+
 def get_expenses_for_user(user_id):
     return get_db().execute(
         "SELECT * FROM expenses WHERE user_id = ? ORDER BY date DESC", (user_id,)

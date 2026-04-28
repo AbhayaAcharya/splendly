@@ -1,6 +1,13 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, g
+from database.db import init_db, seed_db, close_db
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'dev-secret-change-in-production'
+
+init_db(app)
+seed_db(app)
+
+app.teardown_appcontext(close_db)
 
 
 # ------------------------------------------------------------------ #
